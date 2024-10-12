@@ -45,7 +45,6 @@ exports.register = async (req, res) => {
     }
   }
 
-  // Create user instance with all fields
   const user = new User({
     name,
     email,

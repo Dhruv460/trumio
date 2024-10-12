@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useParams, Link } from "react-router-dom"; // Import useParams for getting URL parameters
+import { useParams, Link } from "react-router-dom";
 
 const ProjectDetail = () => {
-  const { id } = useParams(); // Get project ID from the URL
+  const { id } = useParams();
   const [project, setProject] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -11,7 +11,7 @@ const ProjectDetail = () => {
   const fetchProjectDetails = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:3000/api/projects/getProject/${id}`, // Endpoint to fetch project details
+        `http://localhost:3000/api/projects/getProject/${id}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,

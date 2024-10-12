@@ -1,8 +1,7 @@
 import React from "react";
 import { Box, Typography, Button } from "@mui/material";
-import { motion } from "framer-motion"; // for animations
+import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-// import "./AboutUs.css"; // Import your CSS for hover effects
 
 const AboutUs = () => {
   return (

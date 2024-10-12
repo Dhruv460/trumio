@@ -1,6 +1,6 @@
 // import React, { useState } from "react";
 // import { Box, Button, TextField, Typography } from "@mui/material";
-// import tru from "../assets/tru2.jpg"; // Ensure the path to the image is correct
+// import tru from "../assets/tru2.jpg";
 // import axios from "axios"; // Import axios
 // import { useLocation, useNavigate } from "react-router-dom";
 // import { ToastContainer, toast } from "react-toastify";

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Box, Button, Typography } from "@mui/material";
-import tru from "../assets/tru2.jpg"; // Import the image correctly
+import tru from "../assets/tru2.jpg";
 import { useNavigate, Link } from "react-router-dom";
 
 const AccountTypePage = () => {

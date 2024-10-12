@@ -159,7 +159,7 @@ const PostProject = () => {
               style: { color: "#ffffff" },
               sx: {
                 "&::-webkit-calendar-picker-indicator": {
-                  filter: "invert(1)", // Ensures calendar icon remains visible in dark mode
+                  filter: "invert(1)",
                 },
               },
             }}
@@ -169,7 +169,7 @@ const PostProject = () => {
               "& .MuiOutlinedInput-notchedOutline": {
                 borderColor: "#ffffff",
               },
-              boxSizing: "border-box", // Fixes the label cut-off issue
+              boxSizing: "border-box",
             }}
           />
           <TextField

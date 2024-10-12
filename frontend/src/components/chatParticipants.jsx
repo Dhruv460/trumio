@@ -5,11 +5,10 @@ import axios from "axios";
 const ChatParticipants = ({ onSelectParticipant }) => {
   const [participants, setParticipants] = useState([]);
 
-  // Fetch chat participants from the server
   const fetchParticipants = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:3000/api/chat/getParticipants", // Adjust endpoint as necessary
+        "http://localhost:3000/api/chat/getParticipants",
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
