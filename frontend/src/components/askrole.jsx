@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Box, Button, Typography } from "@mui/material";
 import tru from "../assets/tru2.jpg"; // Import the image correctly
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const AccountTypePage = () => {
   const [role, setRole] = useState("");
@@ -67,7 +67,7 @@ const AccountTypePage = () => {
         </Box>
 
         <Typography variant="body2" sx={{ mt: 3 }}>
-          Already have an account? <a href="/signin">Sign In</a>
+          Already have an account? <Link to="/signin">signin</Link>
         </Typography>
       </Box>
     </Box>

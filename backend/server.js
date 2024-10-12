@@ -4,6 +4,7 @@ const http = require("http");
 const { Server } = require("socket.io");
 const connectDB = require("./config/db");
 const authRoutes = require("./Routes/authRoutes");
+const assistantRoutes = require("./Routes/assistRoute");
 const projectRoutes = require("./Routes/projectRoutes");
 const messageRoutes = require("./Routes/messageRoutes");
 const conversationRoutes = require("./Routes/conversationRoutes");
@@ -39,7 +40,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/projects", projectRoutes);
 app.use("/api/messages", messageRoutes);
 app.use("/api/convo", conversationRoutes);
-
+app.use("/api", assistantRoutes);
 io.use((socket, next) => {
   const token = socket.handshake.query.token;
   if (token) {

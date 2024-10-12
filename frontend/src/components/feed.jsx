@@ -3,13 +3,29 @@ import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import { motion } from "framer-motion";
 import Swal from "sweetalert2";
-
+import { Link } from "react-router-dom"; // Import Link from react-router-dom
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css"; // Toast CSS
 const Feed = () => {
   const [projects, setProjects] = useState([]);
   const [role, setRole] = useState("");
   const [selectedProject, setSelectedProject] = useState(null);
   const [message, setMessage] = useState("");
-  const [selectedParticipant, setSelectedParticipant] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const projectsPerPage = 3;
+  const [reposting, setReposting] = useState({});
+  const formatDate = (dateString) => {
+    if (!dateString) {
+      console.error("Invalid date string:", dateString);
+      return "Invalid date";
+    }
+    const date = new Date(dateString);
+    if (isNaN(date)) {
+      console.error("Invalid date value:", dateString);
+      return "Invalid date";
+    }
+    return date.toISOString().split("T")[0];
+  };
 
   const fetchProjects = async () => {
     try {
@@ -21,7 +37,6 @@ const Feed = () => {
           },
         }
       );
-
       if (Array.isArray(response.data)) {
         setProjects(response.data);
       } else {
@@ -37,7 +52,8 @@ const Feed = () => {
       Swal.fire("Error", "Please enter a message before sending.", "error");
       return;
     }
-    var conversationId;
+
+    let conversationId;
     try {
       const response = await axios.post(
         "http://localhost:3000/api/convo/create",
@@ -49,11 +65,8 @@ const Feed = () => {
         }
       );
       conversationId = response.data._id;
-      console.log(response.data);
-      console.log(conversationId);
     } catch (error) {
       console.error("Error creating conversation:", error);
-      // Return null if there's an error
     }
 
     if (!conversationId) {
@@ -78,7 +91,6 @@ const Feed = () => {
       Swal.fire("Success", "Message sent successfully!", "success");
       setMessage("");
       setSelectedProject(null);
-      setSelectedParticipant(null);
     } catch (error) {
       console.error("Error sending message:", error);
       Swal.fire("Error", "Failed to send the message.", "error");
@@ -86,8 +98,10 @@ const Feed = () => {
   };
 
   const handleRepost = async (projectId) => {
+    setReposting((prev) => ({ ...prev, [projectId]: true })); // Set reposting status to true
+
     try {
-      const response = await axios.put(
+      await axios.put(
         `http://localhost:3000/api/projects/repost/${projectId}`,
         {},
         {
@@ -96,17 +110,23 @@ const Feed = () => {
           },
         }
       );
-      console.log("Reposted project:", response.data);
-      // Optionally, refetch the projects after a repost
-      fetchProjects();
+
+      // Show success toast notification
+
+      toast.success("Project reposted successfully!");
+      console.log("reposted");
+      fetchProjects(); // Refresh projects after reposting
     } catch (error) {
       console.error("Error reposting project:", error);
+      toast.error("Failed to repost the project."); // Show error toast notification
+    } finally {
+      setReposting((prev) => ({ ...prev, [projectId]: false })); // Reset reposting status
     }
   };
 
   const handleBid = (projectId) => {
     console.log(`Bidding on project: ${projectId}`);
-    //likhta hu bad m iska logic
+    // Logic for bidding goes here
   };
 
   useEffect(() => {
@@ -117,64 +137,126 @@ const Feed = () => {
       setRole(decodedToken.role);
     }
   }, []);
-  // ye majdoori gpt ne kri ..(thanks to gpt)
+
+  // Pagination Logic
+  const indexOfLastProject = currentPage * projectsPerPage;
+  const indexOfFirstProject = indexOfLastProject - projectsPerPage;
+  const currentProjects = projects.slice(
+    indexOfFirstProject,
+    indexOfLastProject
+  );
+  const totalPages = Math.ceil(projects.length / projectsPerPage);
+
   return (
-    <div className="feed bg-gray-100 min-h-screen p-6">
-      <h1 className="text-3xl font-bold text-center mb-6">Project Feed</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {projects.length > 0 ? (
-          projects.map((project) => (
+    <div className="feed bg-gray-900 min-h-screen p-6">
+      <h1 className="text-3xl font-bold text-center mb-6 text-white">
+        Discover Alumni Projects
+      </h1>
+      <div className="grid grid-cols-1 gap-0">
+        {currentProjects.length > 0 ? (
+          currentProjects.map((project) => (
             <motion.div
               key={project._id}
-              className="bg-white rounded-lg shadow-md p-4 transition-transform duration-300 hover:shadow-lg hover:scale-105"
+              className="bg-gray-800 rounded-lg shadow-md p-0 flex h-[33vh] mb-4 border-b border-white"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
             >
-              <h2 className="text-xl font-semibold">{project.title}</h2>
-              <p className="text-gray-700 mb-2">{project.description}</p>
-              {role === "Alumni" && project.client && (
-                <p className="text-gray-600">
-                  Posted by: {project.client.name}
+              {project.image && (
+                <img
+                  src={project.image}
+                  alt={project.title}
+                  className="w-[30vw] h-auto object-contain rounded-l-lg"
+                />
+              )}
+              <div className="flex-1 p-4">
+                <div className="flex items-center mb-2">
+                  {role === "Client" && project.client && (
+                    <p className="text-gray-400">
+                      Posted by: {project.client.name}
+                    </p>
+                  )}
+                  {role === "Student" && project.client && (
+                    <p className="text-gray-400">
+                      Posted by: {project.client.name} | Reposted by:{" "}
+                      {project.repostedBy ? project.repostedBy.name : "N/A"}
+                    </p>
+                  )}
+                </div>
+                <h2 className="text-xl font-semibold text-white">
+                  {project.title}
+                </h2>
+                <p className="text-gray-300">
+                  Deadline to apply:{" "}
+                  <span className="font-bold">
+                    {project.deadline ? formatDate(project.deadline) : "N/A"}
+                  </span>
                 </p>
-              )}
-              {role === "Student" && project.client && (
-                <p className="text-gray-600">
-                  Posted by: {project.client.name} | Reposted by:{" "}
-                  {project.repostedBy ? project.repostedBy.name : "N/A"}
-                </p>
-              )}
-              {role === "User" && (
-                <button
-                  onClick={() => handleBid(project._id)}
-                  className="mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition"
-                >
-                  Bid
-                </button>
-              )}
-              {role === "Alumni" && (
-                <>
-                  <button
-                    onClick={() => handleRepost(project._id)}
-                    className="mt-4 bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition"
+                <div className="flex justify-between items-center mt-4">
+                  <Link
+                    to={`/project/${project._id}`} // Update the route to the project detail page
+                    className="text-blue-500 hover:underline"
                   >
-                    Repost
-                  </button>
-                  <button
-                    onClick={() => {
-                      setSelectedProject(project);
-                      setMessage(""); // Reset message input
-                    }}
-                    className="mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition"
-                  >
-                    Send Message
-                  </button>
-                </>
-              )}
+                    Read More
+                  </Link>
+                  {role === "Student" && (
+                    <button
+                      onClick={() => handleBid(project._id)}
+                      className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition"
+                    >
+                      Bid
+                    </button>
+                  )}
+                  {role === "Client" && (
+                    <>
+                      <button
+                        onClick={() => handleRepost(project._id)}
+                        disabled={reposting[project._id]} // Disable button while reposting
+                        className={`${
+                          reposting[project._id]
+                            ? "bg-gray-500 cursor-not-allowed" // Change to a "disabled" color
+                            : "bg-green-500 hover:bg-green-600"
+                        } text-white py-2 px-4 rounded transition ml-2`}
+                      >
+                        {reposting[project._id] ? "Reposting..." : "Repost"}
+                      </button>
+                      <button
+                        onClick={() => {
+                          setSelectedProject(project);
+                          setMessage(""); // Reset message input
+                        }}
+                        className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition ml-2"
+                      >
+                        Send Message
+                      </button>
+                    </>
+                  )}
+                </div>
+              </div>
             </motion.div>
           ))
         ) : (
           <p className="text-center text-gray-500">No projects available</p>
+        )}
+        <ToastContainer />
+      </div>
+
+      <div className="flex justify-center mt-4">
+        {currentPage > 1 && (
+          <button
+            onClick={() => setCurrentPage(currentPage - 1)}
+            className="bg-gray-700 text-white py-2 px-4 rounded hover:bg-gray-600 transition"
+          >
+            Previous
+          </button>
+        )}
+        {currentPage < totalPages && (
+          <button
+            onClick={() => setCurrentPage(currentPage + 1)}
+            className="ml-4 bg-gray-700 text-white py-2 px-4 rounded hover:bg-gray-600 transition"
+          >
+            Next
+          </button>
         )}
       </div>
 

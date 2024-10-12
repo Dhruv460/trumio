@@ -10,7 +10,7 @@ const userSchema = new mongoose.Schema(
     password: { type: String, required: true },
     role: {
       type: String,
-      enum: ["Client", "Alumni", "Student"],
+      enum: ["Client", "Student"],
     },
     university: { type: String },
     companyName: { type: String },
@@ -18,6 +18,9 @@ const userSchema = new mongoose.Schema(
     individualOrCompany: {
       type: String,
       enum: ["Individual", "Company"],
+    },
+    image: {
+      type: String,
     },
   },
   { timestamps: true }
