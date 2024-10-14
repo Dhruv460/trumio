@@ -71,13 +71,12 @@ const ProjectDetail = () => {
       </p>
       <p className="text-gray-300 text-lg">
         <strong>Deadline:</strong> {formatDate(project.deadline)}{" "}
-        {/* Format the deadline */}
       </p>
       <Link
         to="/feed"
         className="mt-6 inline-block bg-blue-500 text-white py-3 px-6 rounded-lg shadow-md hover:bg-blue-600 transition duration-300"
       >
-        Back to Projects
+        Back to main feed
       </Link>
     </div>
   );

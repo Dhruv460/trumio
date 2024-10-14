@@ -8,6 +8,7 @@ const ProfilePage = () => {
     role: "",
     university: "",
     bio: "",
+    image: "",
   });
 
   const [editingBio, setEditingBio] = useState(false);
@@ -36,8 +37,8 @@ const ProfilePage = () => {
 
   const handleBioSave = async () => {
     try {
-      const response = await axios.put(
-        "http://localhost:3000/api/auth/profile/bio",
+      await axios.put(
+        "http://localhost:3000/api/auth/addbio",
         { bio: bioText },
         {
           headers: {
@@ -53,76 +54,84 @@ const ProfilePage = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto mt-10 p-8 bg-white rounded-lg shadow-lg">
-      <h2 className="text-3xl font-bold mb-6 text-center text-gray-800">
-        Profile
-      </h2>
-
-      <div className="mb-4">
-        <label className="block text-gray-500 text-sm">Name</label>
-        <p className="text-gray-900 font-medium text-lg">{profileData.name}</p>
-      </div>
-
-      <div className="mb-4">
-        <label className="block text-gray-500 text-sm">Email</label>
-        <p className="text-gray-900 font-medium text-lg">{profileData.email}</p>
-      </div>
-
-      <div className="mb-4">
-        <label className="block text-gray-500 text-sm">Role</label>
-        <p className="text-gray-900 font-medium text-lg">{profileData.role}</p>
-      </div>
-
-      <div className="mb-4">
-        <label className="block text-gray-500 text-sm">University</label>
-        <p className="text-gray-900 font-medium text-lg">
-          {profileData.university}
-        </p>
-      </div>
-
-      {/* Bio Section */}
-      <div className="mb-4">
-        <label className="block text-gray-500 text-sm">Bio</label>
-        {editingBio ? (
-          <div className="mt-2">
-            <textarea
-              className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              value={bioText}
-              onChange={(e) => setBioText(e.target.value)}
-              rows="4"
+    <div className="min-h-screen bg-gray-900 text-white py-10 px-5">
+      <div className="max-w-4xl mx-auto bg-gray-800 p-8 rounded-xl shadow-lg animate-fadeIn">
+        <div className="flex flex-col items-center mb-6">
+          <div className="relative group mb-4">
+            <img
+              src={
+                profileData.image ||
+                "https://freesvg.org/img/abstract-user-flat-4.png"
+              }
+              alt="Profile"
+              className="w-32 h-32 rounded-full border-4 border-blue-600 object-cover shadow-lg transition-transform transform group-hover:scale-105"
             />
-            <div className="flex justify-end mt-3">
-              <button
-                className="px-4 py-2 mr-2 bg-gray-300 rounded-md text-gray-700 hover:bg-gray-400"
-                onClick={() => setEditingBio(false)}
-              >
-                Cancel
-              </button>
-              <button
-                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-                onClick={handleBioSave}
-              >
-                Save
+            <div className="absolute inset-0 bg-black bg-opacity-40 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+              <button className="text-sm text-white bg-blue-600 px-4 py-2 rounded-full hover:bg-blue-700">
+                Change Image
               </button>
             </div>
           </div>
-        ) : (
-          <div className="mt-2">
-            {profileData.bio ? (
-              <p className="text-gray-900 text-lg leading-relaxed">
-                {profileData.bio}
-              </p>
-            ) : (
-              <p className="text-gray-500 italic">No bio added yet</p>
-            )}
-            <button
-              className="mt-3 text-blue-600 hover:text-blue-800 font-medium"
-              onClick={() => setEditingBio(true)}
-            >
-              {profileData.bio ? "Edit Bio" : "Add Bio"}
-            </button>
+
+          <p className="text-3xl font-semibold">{profileData.name}</p>
+          <p className="text-lg text-gray-400">{profileData.email}</p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+          <div className="p-4 bg-gray-700 rounded-lg shadow-md hover:shadow-xl transition-shadow transform hover:scale-105">
+            <label className="block text-gray-400 text-sm">Role</label>
+            <p className="text-lg font-medium">{profileData.role}</p>
           </div>
-        )}
+
+          <div className="p-4 bg-gray-700 rounded-lg shadow-md hover:shadow-xl transition-shadow transform hover:scale-105">
+            <label className="block text-gray-400 text-sm">University</label>
+            <p className="text-lg font-medium">{profileData.university}</p>
+          </div>
+        </div>
+
+        <div className="p-4 bg-gray-700 rounded-lg shadow-md hover:shadow-xl transition-shadow transform hover:scale-105">
+          <label className="block text-gray-400 text-sm">Bio</label>
+          {editingBio ? (
+            <div className="mt-2">
+              <textarea
+                className="w-full p-3 bg-gray-800 text-white border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-transform transform"
+                value={bioText}
+                onChange={(e) => setBioText(e.target.value)}
+                rows="4"
+              />
+              <div className="flex justify-end mt-3">
+                <button
+                  className="px-4 py-2 mr-2 bg-gray-600 rounded-md text-gray-300 hover:bg-gray-500 transition-transform transform hover:scale-105"
+                  onClick={() => setEditingBio(false)}
+                >
+                  Cancel
+                </button>
+                <button
+                  className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-transform transform hover:scale-105"
+                  onClick={handleBioSave}
+                >
+                  Save
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div className="mt-2">
+              {profileData.bio ? (
+                <p className="text-gray-300 text-lg leading-relaxed transition-transform transform hover:scale-105">
+                  {profileData.bio}
+                </p>
+              ) : (
+                <p className="text-gray-500 italic">No bio added yet</p>
+              )}
+              <button
+                className="mt-3 text-blue-400 hover:text-blue-600 font-medium transition-transform transform hover:scale-105"
+                onClick={() => setEditingBio(true)}
+              >
+                {profileData.bio ? "Edit Bio" : "Add Bio"}
+              </button>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

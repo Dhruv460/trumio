@@ -1,4 +1,3 @@
-// models/ChatHistory.js
 const mongoose = require("mongoose");
 
 const chatHistorySchema = new mongoose.Schema({

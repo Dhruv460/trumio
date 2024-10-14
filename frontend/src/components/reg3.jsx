@@ -1,7 +1,7 @@
 // import React, { useState } from "react";
 // import { Box, Button, TextField, Typography } from "@mui/material";
 // import tru from "../assets/tru2.jpg";
-// import axios from "axios"; // Import axios
+// import axios from "axios";
 // import { useLocation, useNavigate } from "react-router-dom";
 // import { ToastContainer, toast } from "react-toastify";
 // import "react-toastify/dist/ReactToastify.css";
@@ -34,16 +34,14 @@
 //       return;
 //     }
 
-//     const formDataToSend = new FormData();
-//     for (const key in formData) {
-//       formDataToSend.append(key, formData[key]);
-//     }
+//     // const formDataToSend = new FormData();
+//     // for (const key in formData) {
+//     //   formDataToSend.append(key, formData[key]);
+//     // }
 
 //     const completeData = {
 //       ...location.state.formData,
-//       ...formDataToSend,
-//       password: formData.password,
-//       confirmPassword: formData.confirmPassword,
+//       ...formData,
 //     };
 
 //     // Sending complete data for registration
@@ -57,7 +55,6 @@
 //           headers: {
 //             "Content-Type": "multipart/form-data",
 //           },
-//           withCredentials: true,
 //         }
 //       );
 //       console.log(response.data);
@@ -202,10 +199,11 @@
 // };
 
 // export default CompleteProfilePasswordPage;
+
 import React, { useState } from "react";
 import { Box, Button, TextField, Typography } from "@mui/material";
-import tru from "../assets/tru2.jpg"; // Ensure the path to the image is correct
-import axios from "axios"; // Import axios
+import tru from "../assets/tru2.jpg";
+import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -237,7 +235,6 @@ const CompleteProfilePasswordPage = () => {
       ...formData,
     };
 
-    // Sending complete data for registration
     try {
       const response = await axios.post(
         "http://localhost:3000/api/auth/register",

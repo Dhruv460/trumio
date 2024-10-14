@@ -14,7 +14,7 @@ import {
 const Header = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token"));
   const [isHovered, setIsHovered] = useState(false);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false); // State to handle dropdown
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const navigate = useNavigate();
   let role;
 
@@ -41,23 +41,23 @@ const Header = () => {
       }
     });
   };
+
   const handleMouseEnter = () => {
-    setIsHovered(true); // Show AI Assistant text on hover
+    setIsHovered(true);
   };
 
   const handleMouseLeave = () => {
-    setIsHovered(false); // Hide AI Assistant text when hover ends
+    setIsHovered(false);
   };
 
   const toggleDropdown = () => {
-    setIsDropdownOpen(!isDropdownOpen); // Toggle the dropdown visibility
+    setIsDropdownOpen(!isDropdownOpen);
   };
 
   return (
     token && (
       <header className="bg-black text-white shadow-md p-4">
         <div className="container mx-auto flex justify-between items-center">
-          {/* Search Bar */}
           <div className="relative flex items-center w-1/2">
             <FaSearch className="absolute left-3 text-gray-500" />
             <input
@@ -72,17 +72,16 @@ const Header = () => {
               onMouseLeave={handleMouseLeave}
             >
               <button className="bg-gray-700 text-white rounded-full p-2 ml-2">
-                <FaRobot size={27} /> {/* Increased size to 40 */}
+                <FaRobot size={27} />
               </button>
               {isHovered && (
                 <div className="absolute top-10 left-0 bg-black text-white p-1 rounded text-sm">
-                  Assistant {/* Tooltip displayed on hover */}
+                  Assistant
                 </div>
               )}
             </Link>
           </div>
 
-          {/* Navigation Links with Icons */}
           <nav className="flex space-x-8">
             <Link to="/feed" className="flex items-center hover:text-blue-300">
               <FaHome className="mr-2" /> Home
@@ -109,7 +108,6 @@ const Header = () => {
             )}
           </nav>
 
-          {/* Profile Section */}
           {isLoggedIn ? (
             <div className="relative">
               <button
@@ -119,16 +117,24 @@ const Header = () => {
                 <FaUser className="mr-2" /> Me
               </button>
 
-              {/* Dropdown Menu */}
               {isDropdownOpen && (
                 <div className="absolute right-0 mt-2 w-48 bg-white text-black rounded-lg shadow-lg z-50">
                   <Link
                     to="/profile"
                     className="block px-4 py-2 hover:bg-gray-200"
-                    onClick={() => setIsDropdownOpen(false)} // Close the dropdown on click
+                    onClick={() => setIsDropdownOpen(false)}
                   >
                     My Profile
                   </Link>
+                  {role === "Client" && (
+                    <Link
+                      to="/mybids" // Link to My Bids
+                      className="block px-4 py-2 hover:bg-gray-200"
+                      onClick={() => setIsDropdownOpen(false)}
+                    >
+                      My Posts
+                    </Link>
+                  )}
                   <button
                     onClick={handleLogout}
                     className="block w-full text-left px-4 py-2 hover:bg-gray-200"

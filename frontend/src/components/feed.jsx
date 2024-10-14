@@ -3,9 +3,9 @@ import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import { motion } from "framer-motion";
 import Swal from "sweetalert2";
-import { Link } from "react-router-dom"; // Import Link from react-router-dom
+import { Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css"; // Toast CSS
+import "react-toastify/dist/ReactToastify.css";
 const Feed = () => {
   const [projects, setProjects] = useState([]);
   const [role, setRole] = useState("");
@@ -98,7 +98,7 @@ const Feed = () => {
   };
 
   const handleRepost = async (projectId) => {
-    setReposting((prev) => ({ ...prev, [projectId]: true })); // Set reposting status to true
+    setReposting((prev) => ({ ...prev, [projectId]: true }));
 
     try {
       await axios.put(
@@ -111,11 +111,9 @@ const Feed = () => {
         }
       );
 
-      // Show success toast notification
-
       toast.success("Project reposted successfully!");
       console.log("reposted");
-      fetchProjects(); // Refresh projects after reposting
+      fetchProjects();
     } catch (error) {
       console.error("Error reposting project:", error);
       toast.error("Failed to repost the project."); // Show error toast notification
@@ -123,10 +121,49 @@ const Feed = () => {
       setReposting((prev) => ({ ...prev, [projectId]: false })); // Reset reposting status
     }
   };
+  const [bidAmount, setBidAmount] = useState("");
+  const [bidReason, setBidReason] = useState("");
+  const [showBidForm, setShowBidForm] = useState(false);
+  const [bidsSubmitted, setBidsSubmitted] = useState({});
+  const handleBidSubmit = async (projectId) => {
+    if (!bidAmount || !bidReason) {
+      Swal.fire("Error", "Please fill in all fields.", "error");
+      return;
+    }
 
+    try {
+      await axios.post(
+        `http://localhost:3000/api/projects/${projectId}/bid`,
+        {
+          bidAmount,
+          bidReason,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      setBidsSubmitted((prev) => ({ ...prev, [projectId]: true }));
+      Swal.fire("Success", "Bid submitted successfully!", "success");
+      setBidAmount("");
+      setBidReason("");
+      setShowBidForm(false);
+    } catch (error) {
+      console.error("Error submitting bid:", error);
+      Swal.fire("Error", "Failed to submit bid.", "error");
+    }
+  };
+  useEffect(() => {
+    if (selectedProject) {
+      console.log("Selected Project:", selectedProject); // This will log the updated value of selectedProject
+    }
+  }, [selectedProject]);
   const handleBid = (projectId) => {
-    console.log(`Bidding on project: ${projectId}`);
-    // Logic for bidding goes here
+    setSelectedProject(projectId);
+    console.log(selectedProject);
+    console.log(projectId);
+    setShowBidForm(true); // Show the bid form when "Bid" button is clicked
   };
 
   useEffect(() => {
@@ -138,7 +175,6 @@ const Feed = () => {
     }
   }, []);
 
-  // Pagination Logic
   const indexOfLastProject = currentPage * projectsPerPage;
   const indexOfFirstProject = indexOfLastProject - projectsPerPage;
   const currentProjects = projects.slice(
@@ -149,6 +185,42 @@ const Feed = () => {
 
   return (
     <div className="feed bg-gray-900 min-h-screen p-6">
+      {showBidForm && (
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-md max-w-sm w-full">
+            <h2 className="text-lg font-bold mb-4">Submit Your Bid</h2>
+            <input
+              type="number"
+              value={bidAmount}
+              onChange={(e) => setBidAmount(e.target.value)}
+              className="w-full border p-2 rounded mb-4"
+              placeholder="Enter your bid amount"
+            />
+            <textarea
+              value={bidReason}
+              onChange={(e) => setBidReason(e.target.value)}
+              rows="4"
+              className="w-full border p-2 rounded mb-4"
+              placeholder="Why should you be selected?"
+            />
+            <div className="flex justify-end">
+              <button
+                onClick={() => handleBidSubmit(selectedProject)}
+                className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+              >
+                Submit Bid
+              </button>
+              <button
+                onClick={() => setShowBidForm(false)}
+                className="ml-2 bg-gray-300 text-black py-2 px-4 rounded hover:bg-gray-400"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <h1 className="text-3xl font-bold text-center mb-6 text-white">
         Discover Alumni Projects
       </h1>
@@ -194,33 +266,39 @@ const Feed = () => {
                 </p>
                 <div className="flex justify-between items-center mt-4">
                   <Link
-                    to={`/project/${project._id}`} // Update the route to the project detail page
+                    to={`/project/${project._id}`}
                     className="text-blue-500 hover:underline"
                   >
                     Read More
                   </Link>
                   {role === "Student" && (
-                    <button
-                      onClick={() => handleBid(project._id)}
-                      className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition"
-                    >
-                      Bid
-                    </button>
+                    <>
+                      {bidsSubmitted[project._id] ? (
+                        <span className="text-green-500">Bid Submitted</span>
+                      ) : (
+                        <button
+                          onClick={() => handleBid(project._id)}
+                          className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition"
+                        >
+                          Bid
+                        </button>
+                      )}
+                    </>
                   )}
                   {role === "Client" && (
                     <>
                       <button
                         onClick={() => handleRepost(project._id)}
-                        disabled={reposting[project._id]} // Disable button while reposting
+                        disabled={reposting[project._id]}
                         className={`${
                           reposting[project._id]
-                            ? "bg-gray-500 cursor-not-allowed" // Change to a "disabled" color
+                            ? "bg-gray-500 cursor-not-allowed"
                             : "bg-green-500 hover:bg-green-600"
                         } text-white py-2 px-4 rounded transition ml-2`}
                       >
                         {reposting[project._id] ? "Reposting..." : "Repost"}
                       </button>
-                      <button
+                      {/* <button
                         onClick={() => {
                           setSelectedProject(project);
                           setMessage(""); // Reset message input
@@ -228,7 +306,7 @@ const Feed = () => {
                         className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition ml-2"
                       >
                         Send Message
-                      </button>
+                      </button> */}
                     </>
                   )}
                 </div>
@@ -260,7 +338,7 @@ const Feed = () => {
         )}
       </div>
 
-      {selectedProject && (
+      {/* {selectedProject && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50">
           <div className="bg-white p-6 rounded-lg shadow-md max-w-sm w-full">
             <h2 className="text-lg font-bold mb-4">Send Message</h2>
@@ -287,7 +365,7 @@ const Feed = () => {
             </div>
           </div>
         </div>
-      )}
+      )} */}
     </div>
   );
 };

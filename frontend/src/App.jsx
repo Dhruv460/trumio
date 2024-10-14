@@ -15,6 +15,8 @@ import CompleteProfilePasswordPage from "./components/reg3";
 import AboutUs from "./components/About";
 import Footer from "./components/footer";
 import ProjectDetail from "./components/projectDetail";
+import ProjectBids from "./components/bid";
+import Feedback from "./components/feedback";
 function App() {
   const [token, setToken] = useState(localStorage.getItem("token"));
 
@@ -46,6 +48,10 @@ function App() {
           <Route path="/reg_3" element={<CompleteProfilePasswordPage />} />
           <Route path="/" element={<AboutUs />} />
           <Route path="/feed" element={<ProtectedRoute element={<Feed />} />} />
+          <Route
+            path="/feedback"
+            element={<ProtectedRoute element={<Feedback />} />}
+          />
           <Route path="/post" element={<ProtectedRoute element={<Post />} />} />
           <Route path="/project/:id" element={<ProjectDetail />} />{" "}
           {/* Add this line */}
@@ -58,7 +64,12 @@ function App() {
             path="/chatAi"
             element={<ProtectedRoute element={<ChatAi />} />}
           />
+          <Route
+            path="/mybids"
+            element={<ProtectedRoute element={<ProjectBids />} />}
+          />
         </Routes>
+
         <Footer />
       </Router>
     </>

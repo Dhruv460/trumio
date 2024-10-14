@@ -26,7 +26,6 @@ const Footer = () => {
         textAlign: "center",
       }}
     >
-      {/* Main Content */}
       <Grid container spacing={4} justifyContent="center">
         <Grid item xs={12} md={3}>
           <Typography variant="h6" sx={{ mb: 2, fontWeight: "bold" }}>
@@ -51,12 +50,12 @@ const Footer = () => {
             About Us
           </Link>
           <Link
-            href="/services"
+            href="/feedback"
             underline="hover"
             color="inherit"
             sx={{ display: "block", mb: 1 }}
           >
-            Services
+            feedback
           </Link>
           <Link
             href="/feed"
@@ -112,7 +111,6 @@ const Footer = () => {
         </Grid>
       </Grid>
 
-      {/* Divider */}
       <Divider sx={{ backgroundColor: "#ffffff", margin: "30px 0" }} />
 
       {/* Copyright Section */}

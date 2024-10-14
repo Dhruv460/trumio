@@ -152,7 +152,7 @@ const PostProject = () => {
             fullWidth
             margin="normal"
             InputLabelProps={{
-              shrink: true, // Ensure label stays above
+              shrink: true,
               style: { color: "#ffffff" },
             }}
             inputProps={{

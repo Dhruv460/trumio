@@ -141,7 +141,7 @@
     width: 64px;
     height: 34px;
     margin-left: 4rem;
-    /* Space from logo */
+    
 }
 
 .switch input {
@@ -242,14 +242,14 @@
     transform: translateX(30px);
 }
 
-/* General styles for both modes */
+
 body {
     margin: 0;
     font-family: Arial, sans-serif;
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Dark mode styles */
+
 .dark-mode {
     background-color: #121212;
     color: #ffffff;
@@ -297,7 +297,7 @@ body {
     background-color: #444;
 }
 
-/* Light mode styles */
+
 .light-mode {
     background-color: #ffffff;
     color: #000000;
@@ -345,7 +345,7 @@ body {
     background-color: #fff;
 }
 
-/* Additional styles */
+
 .user-initial {
     width: 32px;
     height: 32px;
@@ -410,7 +410,6 @@ body {
 }
 
 
-/* background */
 
 
 
@@ -423,7 +422,7 @@ body {
     height: 100%;
     width: 100%;
     background: transparent;
-    /* Changed from the gradient to transparent */
+
     position: absolute;
     z-index: -1;
 }
@@ -564,7 +563,7 @@ div .dot {
 }
 .highlight {
     color: #007bff;
-    /* Blue highlight for important words */
+
     font-weight: bold;
 }
 
@@ -598,7 +597,7 @@ div .dot {
     background-color: #0056b3;
     transform: translateY(-5px);
 }
-/* Footer custom styles for additional polish */
+
 .footer-link {
     color: inherit;
     transition: color 0.3s ease-in-out;
@@ -606,7 +605,7 @@ div .dot {
 
 .footer-link:hover {
     color: #007bff;
-    /* A nice hover color for links */
+
 }
 
 .footer-icon {
@@ -620,7 +619,7 @@ div .dot {
 
 @media (max-width: 768px) {
 
-    /* Mobile responsiveness */
+
     .footer-grid {
         text-align: center;
         padding: 20px;
@@ -647,4 +646,18 @@ div .dot {
 
 button {
     transition: background-color 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.animate-fadeIn {
+    animation: fadeIn 1s ease forwards;
 }

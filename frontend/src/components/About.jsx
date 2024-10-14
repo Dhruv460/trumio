@@ -7,7 +7,7 @@ const AboutUs = () => {
   return (
     <Box
       sx={{
-        backgroundColor: "#0a0f29", // Dark background
+        backgroundColor: "#0a0f29",
         color: "#ffffff",
         minHeight: "100vh",
         display: "flex",
@@ -17,7 +17,6 @@ const AboutUs = () => {
         padding: 4,
       }}
     >
-      {/* Animated Header */}
       <motion.div
         initial={{ opacity: 0, y: -50 }}
         animate={{ opacity: 1, y: 0 }}
@@ -28,7 +27,6 @@ const AboutUs = () => {
         </Typography>
       </motion.div>
 
-      {/* Brief Introduction */}
       <motion.div
         initial={{ opacity: 0, x: -50 }}
         animate={{ opacity: 1, x: 0 }}
@@ -50,7 +48,6 @@ const AboutUs = () => {
         </Typography>
       </motion.div>
 
-      {/* Animated Feature Section */}
       <Box
         sx={{
           marginTop: 5,
@@ -103,7 +100,6 @@ const AboutUs = () => {
         </motion.div>
       </Box>
 
-      {/* Call to Action */}
       <motion.div
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}

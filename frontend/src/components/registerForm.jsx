@@ -9,11 +9,11 @@ const RegisterForm = () => {
     name: "",
     email: "",
     password: "",
-    role: "Client", // Default role
+    role: "Client",
     university: "",
-    companyName: "", // For Client and Alumni
-    isCompany: false, // For Client
-    currentCompany: "", // For Alumni
+    companyName: "",
+    isCompany: false,
+    currentCompany: "",
   });
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();

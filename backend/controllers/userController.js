@@ -1,9 +1,8 @@
 const User = require("../models/user");
 const jwt = require("jsonwebtoken");
-
+const asyncHandlers = require("express-async-handler");
 const cloudinary = require("../config/cloudinary");
 
-// Register User
 exports.register = async (req, res) => {
   const { name, email, password, role, university } = req.body;
   console.log(email);
@@ -18,7 +17,6 @@ exports.register = async (req, res) => {
     try {
       console.log("try  k neeche");
 
-      // Use Cloudinary's upload_stream to handle the file buffer
       const result = await new Promise((resolve, reject) => {
         const stream = cloudinary.uploader.upload_stream(
           { folder: "profile_images" },
@@ -31,7 +29,6 @@ exports.register = async (req, res) => {
           }
         );
 
-        // Pipe the buffer to Cloudinary's upload stream
         stream.end(req.file.buffer);
       });
 
@@ -63,7 +60,6 @@ exports.register = async (req, res) => {
   res.status(201).json({ token });
 };
 
-// Login User
 exports.login = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
@@ -78,7 +74,6 @@ exports.login = async (req, res) => {
   res.json({ token });
 };
 
-// Get User Profile
 exports.getProfile = async (req, res) => {
   try {
     const user = await User.findById(req.user._id).select("-password");
@@ -92,3 +87,30 @@ exports.getProfile = async (req, res) => {
       .json({ message: "Error fetching profile", error: error.message });
   }
 };
+exports.addBio = async (req, res) => {
+  try {
+    const { bio } = req.body;
+    const userId = req.user._id;
+    const user = await User.findByIdAndUpdate(
+      userId,
+      { bio: bio },
+      { new: true }
+    );
+    res.json(user);
+  } catch (error) {
+    console.log(error);
+  }
+};
+exports.allUser = asyncHandlers(async (req, res) => {
+  const searchRegex = new RegExp(req.query.search, "i");
+  const keyword = req.query.search
+    ? {
+        $or: [
+          { name: { $regex: searchRegex } },
+          { email: { $regex: searchRegex } },
+        ],
+      }
+    : {};
+  const users = await User.find(keyword).find({ _id: { $ne: req.user._id } });
+  res.send(users);
+});

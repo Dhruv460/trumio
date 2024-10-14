@@ -2,8 +2,8 @@ const Project = require("../models/project");
 const User = require("../models/user");
 const cloudinary = require("../config/cloudinary");
 exports.createProject = async (req, res) => {
-  console.log(req.body); // Log the form data
-  console.log(req.file); // Log the file data
+  console.log(req.body);
+  console.log(req.file);
 
   const { title, description, deadline, duration } = req.body;
   console.log(`title is :${title}`);
@@ -15,7 +15,6 @@ exports.createProject = async (req, res) => {
     try {
       console.log("try  k neeche");
 
-      // Use Cloudinary's upload_stream to handle the file buffer
       const result = await new Promise((resolve, reject) => {
         const stream = cloudinary.uploader.upload_stream(
           { folder: "profile_images" },
@@ -28,7 +27,6 @@ exports.createProject = async (req, res) => {
           }
         );
 
-        // Pipe the buffer to Cloudinary's upload stream
         stream.end(req.file.buffer);
       });
 
@@ -187,20 +185,20 @@ exports.getProjects = async (req, res) => {
 //   res.json(projects);
 // };
 
-// // Get projects created by a specific client
-// exports.getClientProjects = async (req, res) => {
-//   const clientId = req.user._id; // Assuming the client is authenticated and their ID is in req.user
+// Get projects created by a specific client
+exports.getClientProjects = async (req, res) => {
+  const clientId = req.user._id; // Assuming the client is authenticated and their ID is in req.user
 
-//   try {
-//     const projects = await Project.find({ client: clientId });
-//     res.json(projects);
-//   } catch (error) {
-//     res.status(500).json({
-//       message: "Error fetching client projects",
-//       error: error.message,
-//     });
-//   }
-// };
+  try {
+    const projects = await Project.find({ client: clientId });
+    res.json(projects);
+  } catch (error) {
+    res.status(500).json({
+      message: "Error fetching client projects",
+      error: error.message,
+    });
+  }
+};
 
 exports.getAllProjects = async (req, res) => {
   try {

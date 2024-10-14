@@ -24,7 +24,25 @@
 // module.exports = mongoose.model("Project", projectSchema);
 
 const mongoose = require("mongoose");
-
+const BidSchema = new mongoose.Schema({
+  student: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
+  bidAmount: {
+    type: Number,
+    required: true,
+  },
+  bidReason: {
+    type: String,
+    required: true,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+});
 const projectSchema = new mongoose.Schema(
   {
     client: {
@@ -34,9 +52,9 @@ const projectSchema = new mongoose.Schema(
     },
     title: { type: String, required: true },
     description: { type: String, required: true },
-    image: { type: String }, // URL of the uploaded image
-    deadline: { type: Date }, // Deadline of the project
-    duration: { type: String }, // Duration of the project
+    image: { type: String },
+    deadline: { type: Date },
+    duration: { type: String },
     repostedBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
@@ -44,9 +62,9 @@ const projectSchema = new mongoose.Schema(
     repostedForUniversity: {
       type: String,
     },
+    bids: [BidSchema],
   },
   { timestamps: true }
 );
 
-// Exporting the model
 module.exports = mongoose.model("Project", projectSchema);

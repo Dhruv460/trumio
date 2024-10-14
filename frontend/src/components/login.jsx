@@ -10,7 +10,7 @@ import tru from "../assets/tru2.jpg";
 import axios from "axios";
 import { useLocation, useNavigate, Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css"; // Toast CSS
+import "react-toastify/dist/ReactToastify.css";
 
 const LoginForm = () => {
   const location = useLocation();
@@ -86,10 +86,8 @@ const LoginForm = () => {
 
   return (
     <Box sx={{ display: "flex", height: "100vh" }}>
-      {/* ToastContainer to display notifications */}
       <ToastContainer />
 
-      {/* Left Section with background image */}
       <Box
         sx={{
           width: "50%",
@@ -103,7 +101,6 @@ const LoginForm = () => {
         }}
       />
 
-      {/* Right Section with Form */}
       <Box
         sx={{
           width: "50%",
@@ -123,13 +120,11 @@ const LoginForm = () => {
           For the purpose of safety, your details need to be filled again.
         </Typography>
 
-        {/* Form starts here */}
         <Box
           sx={{ width: "100%", maxWidth: "400px" }}
           component="form"
           onSubmit={handleSubmit}
         >
-          {/* Email Input */}
           <TextField
             label="College Email ID"
             name="email"
@@ -155,7 +150,6 @@ const LoginForm = () => {
             }}
           />
 
-          {/* Password Input */}
           <TextField
             label="Password"
             name="password"
@@ -182,7 +176,6 @@ const LoginForm = () => {
             }}
           />
 
-          {/* Submit Button with Loader */}
           <Button
             variant="contained"
             fullWidth
@@ -205,7 +198,6 @@ const LoginForm = () => {
           </Button>
         </Box>
 
-        {/* Register prompt */}
         <Typography
           variant="body2"
           sx={{ mt: 3, textAlign: "center", color: "#ffffff" }}
