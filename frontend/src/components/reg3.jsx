@@ -236,6 +236,7 @@ const CompleteProfilePasswordPage = () => {
     };
 
     try {
+      console.log(completeData);
       const response = await axios.post(
         "http://localhost:3000/api/auth/register",
         completeData,

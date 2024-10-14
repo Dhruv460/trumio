@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Box, Button, TextField, Typography } from "@mui/material";
 import tru from "../assets/tru2.jpg";
-import axios from "axios"; // Import axios
+import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -9,6 +9,21 @@ import "react-toastify/dist/ReactToastify.css";
 const CompleteProfilePage = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const allowedDomainExtensions = [
+    ".com",
+    ".in",
+    ".edu",
+    ".org",
+    ".net",
+    ".gov",
+  ];
+  const [domainError, setDomainError] = useState("");
+
+  const isValidDomainExtension = (email) => {
+    return allowedDomainExtensions.some((extension) =>
+      email.endsWith(extension)
+    );
+  };
 
   const [formData, setFormData] = useState({
     email: "",
@@ -18,7 +33,16 @@ const CompleteProfilePage = () => {
     university: "",
   });
   const [loading, setLoading] = useState(false);
+  const handleEmailChange = (event) => {
+    const emailInput = event.target.value;
+    setFormData({ ...formData, email: emailInput });
 
+    if (!isValidDomainExtension(emailInput)) {
+      setDomainError("Email domain extension is not allowed");
+    } else {
+      setDomainError("");
+    }
+  };
   useEffect(() => {
     if (location.state && location.state.role) {
       setFormData((prev) => ({
@@ -108,11 +132,14 @@ const CompleteProfilePage = () => {
           <TextField
             label="College Email ID"
             name="email"
+            type="email"
             value={formData.email}
-            onChange={handleChange}
+            onChange={handleEmailChange}
             fullWidth
             margin="normal"
             required
+            error={!!domainError}
+            helperText={domainError}
             inputProps={{ style: { color: "#ffffff" } }}
             InputLabelProps={{ style: { color: "#ffffff" } }}
             sx={{
