@@ -213,7 +213,11 @@ exports.getAllProjects = async (req, res) => {
 
 exports.getSingleProject = async (req, res) => {
   try {
-    const project = await Project.findById(req.params.id);
+    // const project = await Project.findById(req.params.id);
+    const project = await Project.findById(req.params.id).populate(
+      "client",
+      "name"
+    );
     if (!project) {
       return res.status(404).send("Project not found");
     }

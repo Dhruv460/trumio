@@ -17,6 +17,7 @@ import Footer from "./components/footer";
 import ProjectDetail from "./components/projectDetail";
 import ProjectBids from "./components/bid";
 import Feedback from "./components/feedback";
+import ChatPage from "./components/chatPage";
 function App() {
   const [token, setToken] = useState(localStorage.getItem("token"));
 
@@ -45,6 +46,10 @@ function App() {
           <Route path="/role" element={<AccountTypePage />} />
           {/* <Route path="/" element={<Home />} /> */}
           <Route path="/register" element={<CompleteProfilePage />} />
+          <Route
+            path="/chatpage"
+            element={<ProtectedRoute element={<ChatPage />} />}
+          />
           <Route path="/reg_3" element={<CompleteProfilePasswordPage />} />
           <Route path="/" element={<AboutUs />} />
           <Route path="/feed" element={<ProtectedRoute element={<Feed />} />} />

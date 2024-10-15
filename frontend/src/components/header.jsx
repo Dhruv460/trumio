@@ -87,7 +87,7 @@ const Header = () => {
               <FaHome className="mr-2" /> Home
             </Link>
             <Link
-              to="/message"
+              to="/chatpage"
               className="flex items-center hover:text-blue-300"
             >
               <FaEnvelope className="mr-2" /> Message

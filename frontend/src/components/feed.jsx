@@ -244,15 +244,36 @@ const Feed = () => {
               <div className="flex-1 p-4">
                 <div className="flex items-center mb-2">
                   {role === "Client" && project.client && (
-                    <p className="text-gray-400">
-                      Posted by: {project.client.name}
-                    </p>
+                    <div className="flex items-center text-gray-400">
+                      <img
+                        src={
+                          project.client.image
+                            ? project.client.image
+                            : "https://freesvg.org/img/abstract-user-flat-4.png"
+                        }
+                        alt="Profile"
+                        className="profile-icon w-8 h-8 rounded-full mr-2"
+                      />
+                      <span>
+                        {project.client ? project.client.name : "N/A"}
+                      </span>
+                    </div>
                   )}
                   {role === "Student" && project.client && (
-                    <p className="text-gray-400">
-                      Posted by: {project.client.name} | Reposted by:{" "}
-                      {project.repostedBy ? project.repostedBy.name : "N/A"}
-                    </p>
+                    <div className="flex items-center text-gray-400">
+                      <img
+                        src={
+                          project.client.image
+                            ? project.client.image
+                            : "https://freesvg.org/img/abstract-user-flat-4.png"
+                        }
+                        alt="Profile"
+                        className="profile-icon w-8 h-8 rounded-full mr-2" // Adjust size and margin-right
+                      />
+                      <span>
+                        {project.repostedBy ? project.repostedBy.name : "N/A"}
+                      </span>
+                    </div>
                   )}
                 </div>
                 <h2 className="text-xl font-semibold text-white">
@@ -301,7 +322,7 @@ const Feed = () => {
                       {/* <button
                         onClick={() => {
                           setSelectedProject(project);
-                          setMessage(""); // Reset message input
+                          setMessage(""); 
                         }}
                         className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition ml-2"
                       >

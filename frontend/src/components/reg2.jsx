@@ -106,7 +106,7 @@ const CompleteProfilePage = () => {
           onSubmit={handleSubmit}
         >
           <TextField
-            label="name"
+            label="username"
             name="name"
             value={formData.name}
             onChange={handleChange}
